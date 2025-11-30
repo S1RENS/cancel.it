@@ -1,3 +1,4 @@
+## 👻 Ghost
 The "Abilene Paradox" Solver.
 
 A privacy-focused, ephemeral voting tool designed for social groups to opt-out of plans without social friction. Built with Python and Streamlit.
@@ -58,4 +59,4 @@ $$Threshold = 1.5$$
 
 Result: $1.0 < 1.5 \rightarrow$ GO. (Failure)
 
-Conclusion: With 0.5 weighting, even if the majority (2 out of 3) vote "Soft Cancel," the event still happens. This is the Abilene Paradox.
+Conclusion: With 0.5 weighting, even if the majority (2 out of 3) vote "Soft Cancel," the event still happens. This is the Abilene Paradox, as most of the group would rather cancel.   
