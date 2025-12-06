@@ -1,3 +1,4 @@
+## Cancel-It
 The "Abilene Paradox" Solver.
 
 A privacy-focused, ephemeral voting tool designed for social groups to opt-out of plans without social friction. Built with Python and Streamlit.
@@ -7,7 +8,7 @@ In sociology, the Abilene Paradox occurs when a group of people collectively dec
 
 > Example: Four friends agree to drive to Abilene for dinner. It is a hot, dusty drive. They arrive, eat a mediocre meal, and return home exhausted. Once back, they realize that none of them actually wanted to go; they only agreed because they thought the others wanted to.
 
-Ghost solves this by introducing private preference aggregation. It allows the group to discover the "True Will" of the collective without exposing the "Social Face" of the individual.
+Cancel-It solves this by introducing private preference aggregation. It allows the group to discover the "True Will" of the collective without exposing the "Social Face" of the individual.
 
 ## ⚖️ Design Principles & Mechanism
 This tool is built on specific game-theoretic and privacy principles to ensure honest voting.
@@ -58,4 +59,4 @@ $$Threshold = 1.5$$
 
 Result: $1.0 < 1.5 \rightarrow$ GO. (Failure)
 
-Conclusion: With 0.5 weighting, even if the majority (2 out of 3) vote "Soft Cancel," the event still happens. This is the Abilene Paradox.
+Conclusion: With 0.5 weighting, even if the majority (2 out of 3) vote "Soft Cancel," the event still happens. This is the Abilene Paradox, as most of the group would rather cancel.   
