@@ -98,7 +98,7 @@ poll_id = query_params.get("poll", None)
 
 # === VIEW 1: CREATE POLL ===
 if not poll_id:
-    st.title("👻 Ghost")
+    st.title("Cancel-It")
     st.write("### The Abilene Paradox Solver")
 
     with st.form("create_form"):
