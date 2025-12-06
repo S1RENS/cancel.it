@@ -1,87 +1,17 @@
-import streamlit as st
 import uuid
 
+import streamlit as st
 
-# --- 1. EPHEMERAL STORAGE ---
-# Data lives in memory. Restarting the server wipes all secrets.
-@st.cache_resource
-def get_poll_storage():
-    return {}
+from src import config, storage
+from src.logic import calculate_outcome
 
+st.set_page_config(page_title=config.APP_TITLE, page_icon=config.APP_ICON)
 
-polls = get_poll_storage()
-
-
-# --- 2. THE ALGORITHM ---
-def calculate_outcome(poll_id):
-    poll = polls[poll_id]
-    votes = poll["votes"]
-
-    # A. Initialization: Map raw votes to effective states
-    # 'pending' means the user is waiting on someone else
-    effective_votes = {}
-
-    for user, data in votes.items():
-        v_type = data["type"]
-        if v_type == "hard":
-            effective_votes[user] = "cancel"
-        elif v_type == "go":
-            effective_votes[user] = "go"
-        elif v_type == "soft":
-            effective_votes[user] = "cancel"  # Soft cancel counts towards threshold
-        else:
-            effective_votes[user] = "pending"  # Conditional
-
-    # B. Chain Resolution (Iterative)
-    # Solves linear chains: A needs B -> B needs C -> C Cancels === All Cancel
-    changes = True
-    while changes:
-        changes = False
-        for user, data in votes.items():
-            if data["type"] == "conditional":
-                target = data["target"]
-
-                # If the target hasn't voted (shouldn't happen if we wait for full house), ignore
-                if target not in effective_votes:
-                    continue
-
-                target_status = effective_votes[target]
-                current_status = effective_votes.get(user)
-
-                # Resolve based on target's effective status
-                new_status = current_status
-                if target_status == "go":
-                    new_status = "go"
-                elif target_status == "cancel":
-                    new_status = "cancel"  # If wingman bails, I bail (soft cancel)
-
-                if new_status != current_status:
-                    effective_votes[user] = new_status
-                    changes = True
-
-    # C. Deadlock Resolution (The "Mutual Pact")
-    # If users are still 'pending', they are in a circular loop (A needs B, B needs A).
-    # Logic: We treat mutual dependency as a BLOOD PACT -> GO.
-    for user, status in effective_votes.items():
-        if status == "pending":
-            effective_votes[user] = "go"
-
-    # D. Final Tally
-    # We count how many effective 'cancels' exist
-    cancel_count = sum(1 for status in effective_votes.values() if status == "cancel")
-    total_participants = len(poll["participants"])
-    threshold = total_participants / 2
-
-    if cancel_count > threshold:
-        poll["status"] = "cancelled"
-    else:
-        poll["status"] = "confirmed"
-
-    return
+polls = storage.get_polls()
+lock = storage.get_lock()
 
 
-# --- 3. THE UI ---
-st.set_page_config(page_title="Ghost Vote", page_icon="👻")
+st.set_page_config(page_title="Cancel-It Vote", page_icon="🚫")
 
 # Hide Streamlit elements for "App-like" feel
 hide_streamlit_style = """
@@ -158,7 +88,7 @@ else:
     # If user already voted, just show status
     if len(remaining_voters) == 0:
         st.info("Waiting for results...")
-        calculate_outcome(poll_id)  # Trigger calc if this is the last refresh
+        calculate_outcome(poll)  # Trigger calc if this is the last refresh
         st.rerun()
 
     me = st.selectbox("Select your name", ["Select..."] + remaining_voters)
@@ -196,7 +126,7 @@ else:
 
             # Check if this was the last vote needed
             if len(poll["votes"]) >= len(poll["participants"]):
-                calculate_outcome(poll_id)
+                calculate_outcome(poll)
 
             st.rerun()
 
