@@ -1,4 +1,4 @@
-## Cancel-It
+## 🚫 Cancel-It
 The "Abilene Paradox" Solver.
 
 A privacy-focused, ephemeral voting tool designed for social groups to opt-out of plans without social friction. Built with Python and Streamlit.
@@ -24,7 +24,7 @@ This tool is built on specific game-theoretic and privacy principles to ensure h
 | Wingman     | 🔗  | Variable                | "I go only if [Name] goes." (Resolves recursively before the count).                                 |
 
 ## Wingman system
-Your vote can be automatically adjusted based on who is attending. 
+Your vote can be automatically adjusted based on who is attending.
 1. The Pair: Alice needs Bob $\leftrightarrow$ Bob needs Alice.
     - Result: Both GO. (The Pact).
 2. The Train: Alice needs Bob $\rightarrow$ Bob needs Charlie $\rightarrow$ Charlie needs Alice.
@@ -59,4 +59,4 @@ $$Threshold = 1.5$$
 
 Result: $1.0 < 1.5 \rightarrow$ GO. (Failure)
 
-Conclusion: With 0.5 weighting, even if the majority (2 out of 3) vote "Soft Cancel," the event still happens. This is the Abilene Paradox, as most of the group would rather cancel.   
+Conclusion: With 0.5 weighting, even if the majority (2 out of 3) vote "Soft Cancel," the event still happens. This is the Abilene Paradox, as most of the group would rather cancel.
